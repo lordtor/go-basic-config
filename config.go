@@ -1,4 +1,4 @@
-package base_config
+package go_base_config
 
 import (
 	"encoding/json"
