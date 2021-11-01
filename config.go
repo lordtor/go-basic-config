@@ -171,7 +171,7 @@ func (conf *ApplicationConfig) ReloadConfig() {
 		log.Error(err)
 	}
 
-	ConfServerURI := GetValueByNameFromEnv("OMNI_GLOBAL_SPRING_CLOUD_CONFIG_URI")
+	ConfServerURI := GetValueByNameFromEnv("SPRING_CLOUD_CONFIG_URI")
 	AppName := GetValueByNameFromEnv("APP_NAME")
 	ProfileName := GetValueByNameFromEnv("PROFILE_NAME")
 	if ConfServerURI != "" {
