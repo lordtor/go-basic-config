@@ -30,13 +30,13 @@ run check
 ../../bin/golangci-lint run  --out-format checkstyle > checkstyle.xml
 ```
 
-1. Run test
+2. Run test
 
 ``` bash
 go test -v -coverpkg=./... -coverprofile=profile.cov ./... -json > test_report.json
 ```
 
-1. Coverage
+3. Coverage
 
 ``` bash
 go tool cover -func profile.cov
