@@ -4,17 +4,6 @@ Tis module used as base fo configuration apps.By default, it expands into the in
 
 ## ENV parameters
 
-* OMNI_GLOBAL_SPRING_CLOUD_CONFIG_URI - Config server URI
-* APP_NAME - App name
-* PROFILE_NAME - Profile name for app
-
-## File parameters `application.yml`
-# Base Config module
-
-Tis module used as base fo configuration apps.By default, it expands into the inside of the application. Also, module c reads a dictionary of secrets from the application directory by its `AppName` and extension `json`. 
-
-## ENV parameters
-
 * SPRING_CLOUD_CONFIG_URI - Config server URI
 * APP_NAME - App name
 * PROFILE_NAME - Profile name for app
@@ -25,7 +14,6 @@ Tis module used as base fo configuration apps.By default, it expands into the in
 AppName       string `yaml:"app_name"`
 ConfServerURI string `yaml:"conf_server_uri"`
 LogLevel      string `yaml:"log_level"`
-
 ```
 
 ## Lint, Test & Coverage
