@@ -14,9 +14,9 @@ import (
 
 	"github.com/imdario/mergo"
 
+	go_logging "github.com/lordtor/go-logging"
 	"gopkg.in/resty.v1"
 	"gopkg.in/yaml.v2"
-	"github.com/lordtor/go-logging"
 )
 
 type Secrets map[string]string
@@ -39,7 +39,7 @@ type ApplicationConfig struct {
 var (
 	//AppConfig is ...
 	AppConfig = ApplicationConfig{}
-	log       = logging.Log
+	log       = go_logging.Log
 )
 
 func Exists(name string) (bool, error) {
@@ -204,7 +204,7 @@ func (conf *ApplicationConfig) ReloadConfig() {
 		conf.Secrets = secrets
 	}
 
-	logging.ChangeLogLevel(conf.LogLevel)
+	go_logging.ChangeLogLevel(conf.LogLevel)
 	if strings.ToLower(conf.LogLevel) == "debug" {
 		conf.PrintConfigToLog()
 	}

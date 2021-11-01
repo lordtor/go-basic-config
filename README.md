@@ -181,9 +181,3 @@ func init() {
 }
 ...
 ```
-
-``` GO
-AppName       string `yaml:"app_name"`
-ConfServerURI string `yaml:"conf_server_uri"`
-LogLevel      string `yaml:"log_level"`
-```
