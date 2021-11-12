@@ -37,9 +37,7 @@ type ApplicationConfig struct {
 }
 
 var (
-	//AppConfig is ...
 	AppConfig = ApplicationConfig{}
-	log       = go_logging.Log
 )
 
 func Exists(name string) (bool, error) {
@@ -60,7 +58,7 @@ func (conf *ApplicationConfig) GetSecretsFromJson(fileName string) (Secrets, str
 	}
 
 	filename, _ := filepath.Abs(fmt.Sprintf("%s.json", fileName))
-	log.Debug("[Config:getSecretsFromJson]:: from", filename)
+	go_logging.Log.Debug("[Config:getSecretsFromJson]:: from", filename)
 	S := Secrets{}
 	exist, err := Exists(filename)
 	if err == nil && exist {
@@ -84,21 +82,21 @@ func (conf *ApplicationConfig) GetParamsFromYml(path string) error {
 	if path == "" {
 		path, _ = filepath.Abs("./application.yml")
 	}
-	log.Debug("[Config:GetParamsFromYml]:: Load file: ", path)
+	go_logging.Log.Debug("[Config:GetParamsFromYml]:: Load file: ", path)
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Error("[Config:GetParamsFromYml]:: cannot open file: ", err)
+		go_logging.Log.Error("[Config:GetParamsFromYml]:: cannot open file: ", err)
 		return err
 	}
 	err = yaml.Unmarshal(yamlFile, &conf)
 	if err != nil {
-		log.Error("[Config:GetParamsFromYml]:: cannot unmarshal data: ", err)
+		go_logging.Log.Error("[Config:GetParamsFromYml]:: cannot unmarshal data: ", err)
 		return err
 	}
-	log.Info(conf)
+	go_logging.Log.Info(conf)
 	err = mergo.Merge(&ApplicationConfig{}, conf)
 	if err != nil {
-		log.Error("[Config:GetParamsFromYml]:: cannot Merge data: ", err)
+		go_logging.Log.Error("[Config:GetParamsFromYml]:: cannot Merge data: ", err)
 		return err
 	}
 	return nil
@@ -107,10 +105,10 @@ func (conf *ApplicationConfig) GetParamsFromYml(path string) error {
 //===========read params from env =========
 func GetValueByNameFromEnv(aName string) string {
 	res := ""
-	log.Debug("[Config:GetValueByNameFromEnv]:: Find env value: ", aName)
+	go_logging.Log.Debug("[Config:GetValueByNameFromEnv]:: Find env value: ", aName)
 	aValue, exists := os.LookupEnv(aName)
 	if exists {
-		log.Debug("[Config:GetValueByNameFromEnv]:: Load env value: ", aName)
+		go_logging.Log.Debug("[Config:GetValueByNameFromEnv]:: Load env value: ", aName)
 		res = aValue
 	}
 	return res
@@ -128,21 +126,21 @@ func FetchFileFromCloud(AppName string, ProfileName string, ConfServerURI string
 		u.Path = path.Join(u.Path,
 			strings.Join([]string{AppName, "-", ProfileName, ".yml"},
 				""))
-		log.Info("[Config:fetchFileFromCloud]:: Load env value: ", u.Path)
+		go_logging.Log.Info("[Config:fetchFileFromCloud]:: Load env value: ", u.Path)
 	} else if AppName != "" && ProfileName == "" {
 		u.Path = path.Join(u.Path,
 			strings.Join([]string{AppName, ".yml"},
 				""))
-		log.Info("[Config:fetchFileFromCloud]:: Load env value: ", u.Path)
+		go_logging.Log.Info("[Config:fetchFileFromCloud]:: Load env value: ", u.Path)
 	} else {
-		log.Warn("[Config:fetchFileFromCloud]:: Not set : AppName")
+		go_logging.Log.Warn("[Config:fetchFileFromCloud]:: Not set : AppName")
 		return nil, nil
 	}
 	link := u.String()
 
 	resp, err := resty.R().Get(link)
 	if err != nil {
-		log.Error("[Config:fetchFileFromCloud]:: ", err)
+		go_logging.Log.Error("[Config:fetchFileFromCloud]:: ", err)
 		return nil, err
 	}
 	return resp.Body(), nil
@@ -154,21 +152,21 @@ func (conf *ApplicationConfig) ParseCloudFile() (*ApplicationConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Debug(string(rawBytes))
+	go_logging.Log.Debug(string(rawBytes))
 	err = yaml.Unmarshal(rawBytes, &config)
 	if err != nil {
-		log.Error("[Config:parseCloudFile]:: ", err)
+		go_logging.Log.Error("[Config:parseCloudFile]:: ", err)
 		return nil, err
 	}
-	log.Debug("[Config:parseCloudFile]:: parse cloud file: ", conf)
+	go_logging.Log.Debug("[Config:parseCloudFile]:: parse cloud file: ", conf)
 	return config, nil
 }
 
 func (conf *ApplicationConfig) ReloadConfig() {
-	log.Debug("[Config:ReloadConfig]:: Start func ReloadConfig")
+	go_logging.Log.Debug("[Config:ReloadConfig]:: Start func ReloadConfig")
 	err := conf.GetParamsFromYml("")
 	if err != nil {
-		log.Error(err)
+		go_logging.Log.Error(err)
 	}
 
 	ConfServerURI := GetValueByNameFromEnv("SPRING_CLOUD_CONFIG_URI")
@@ -183,24 +181,24 @@ func (conf *ApplicationConfig) ReloadConfig() {
 	if ProfileName != "" {
 		conf.ProfileName = ProfileName
 	}
-	log.Debug("[Config:ReloadConfig]:: OMNI_GLOBAL_SPRING_CLOUD_CONFIG_URI", conf.ConfServerURI)
+	go_logging.Log.Debug("[Config:ReloadConfig]:: OMNI_GLOBAL_SPRING_CLOUD_CONFIG_URI", conf.ConfServerURI)
 	if ProfileName != "develop" {
 		cloud, err := conf.ParseCloudFile()
 		if err != nil && conf.ConfServerURI != "" {
-			log.Fatal(err)
+			go_logging.Log.Fatal(err)
 		}
 		if cloud != nil {
 			err := mergo.Merge(&conf, cloud)
 			if err != nil {
-				log.Error(err)
+				go_logging.Log.Error(err)
 			}
 		}
 	}
 	secrets, file, err := conf.GetSecretsFromJson("")
 	if err != nil {
-		log.Error("[Config:ReloadConfig]:: ", err)
+		go_logging.Log.Error("[Config:ReloadConfig]:: ", err)
 	} else {
-		log.Infof("[Config:ReloadConfig]:: Use credential's from different file %v\n", file)
+		go_logging.Log.Infof("[Config:ReloadConfig]:: Use credential's from different file %v\n", file)
 		conf.Secrets = secrets
 	}
 
@@ -211,5 +209,5 @@ func (conf *ApplicationConfig) ReloadConfig() {
 }
 
 func (conf *ApplicationConfig) PrintConfigToLog() {
-	log.Infof("config-server: %v", conf)
+	go_logging.Log.Infof("config-server: %v", conf)
 }
