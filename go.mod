@@ -1,12 +1,12 @@
-module github.com/lordtor/go-basic-config
+module go-basic-config
 
 go 1.17
 
 require (
 	github.com/imdario/mergo v0.3.12
-	github.com/lordtor/go-logging v0.1.2
+	github.com/lordtor/go-logging v0.1.3
 	gopkg.in/resty.v1 v1.12.0
-	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
 
 require (

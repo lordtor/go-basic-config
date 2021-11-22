@@ -71,7 +71,7 @@ import (
     "github.com/lordtor/go-basic-config"
     "github.com/lordtor/go-basic-couchdb_helper"
     "github.com/lordtor/go-logging"
-    "gopkg.in/yaml.v2"
+    "gopkg.in/yaml.v3"
 )
 
 var (

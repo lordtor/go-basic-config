@@ -16,7 +16,7 @@ import (
 
 	go_logging "github.com/lordtor/go-logging"
 	"gopkg.in/resty.v1"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type Secrets map[string]string
