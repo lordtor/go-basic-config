@@ -1,4 +1,4 @@
-module go-basic-config
+module github.com/lordtor/go-basic-config
 
 go 1.17
 
