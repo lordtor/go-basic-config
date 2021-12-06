@@ -30,7 +30,7 @@ type Congig interface {
 }
 type ApplicationConfig struct {
 	AppName       string `json:"app_name" yaml:"app_name"`
-	ConfServerURI string `json:"conf_server_uri yaml:"conf_server_uri"`
+	ConfServerURI string `json:"conf_server_uri" yaml:"conf_server_uri"`
 	LogLevel      string `json:"log_level" yaml:"log_level"`
 	ProfileName   string `json:"profile_name" yaml:"profile_name"`
 	Secrets       `json:"-"`
@@ -209,5 +209,14 @@ func (conf *ApplicationConfig) ReloadConfig() {
 }
 
 func (conf *ApplicationConfig) PrintConfigToLog() {
-	go_logging.Log.Infof("config-server: %v", conf)
+	raw, err := json.Marshal(conf)
+	if err != nil {
+		go_logging.Log.Error("[Config:PrintConfigToLog]:: ", err)
+	}
+	j := ApplicationConfig{}
+	err = json.Unmarshal(raw, &j)
+	if err != nil {
+		go_logging.Log.Error("[Config:PrintConfigToLog]:: ", err)
+	}
+	go_logging.Log.Info(j)
 }
