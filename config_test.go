@@ -17,6 +17,7 @@ var C_em = ApplicationConfig{}
 var C_not_em = ApplicationConfig{
 	AppName:     "base_config",
 	ProfileName: "test",
+	LogLevel:    "Debug",
 }
 var BinName = filepath.Base(os.Args[0])
 
@@ -241,6 +242,7 @@ func TestApplicationConfig_PrintConfigToLog(t *testing.T) {
 		conf *ApplicationConfig
 	}{
 		{"Print config", &C_em},
+		{"Print config2", &C_not_em},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

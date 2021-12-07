@@ -33,7 +33,7 @@ type ApplicationConfig struct {
 	ConfServerURI string `json:"conf_server_uri" yaml:"conf_server_uri"`
 	LogLevel      string `json:"log_level" yaml:"log_level"`
 	ProfileName   string `json:"profile_name" yaml:"profile_name"`
-	Secrets       `json:"-"`
+	Secrets       `json:"-" yaml:"secrets"`
 }
 
 var (
