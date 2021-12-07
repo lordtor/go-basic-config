@@ -19,10 +19,10 @@ jobs:
     - name: Install dependencies
       run: |
         go version
-        go get -u golang.org/x/lint/golint
+        go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
     - name: Run vet & lint
       run: |
         go vet .
-        golint .
+        golangci-lint run
     - name: Test
       run: go test -v
